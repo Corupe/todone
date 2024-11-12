@@ -10,8 +10,11 @@ const TodoList = () => {
 	const [newTodo, setNewTodo] = useState<TodoProps>({ ID: "none", content: "" });
 	console.log(todos);
 	const handleNewTodo = () => {
-		setTodos([...todos, newTodo]);
-		setNewTodo({ ID: "none", content: "" });
+		if (newTodo.content !== "") {
+			setTodos([...todos, newTodo]);
+
+			setNewTodo({ ID: "none", content: "" });
+		}
 	};
 	const editTodo = (id: string | number, newContent: string) => {
 		const updatedTodos = todos.map((todo) => (todo.ID === id ? { ...todo, content: newContent } : todo));
