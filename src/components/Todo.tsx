@@ -15,11 +15,11 @@ const Todo = ({ content, editTodo, ID }: TodoProps) => {
 	const [newContent, setNewContent] = useState("");
 	const [editMode, setEditMode] = useState(false);
 	return (
-		<div className={twMerge(deleted ? "opacity-15" : "", "flex gap-2 justify-between items-center w-1/3")}>
-			<div className="button">
+		<div className={twMerge(deleted ? "opacity-15" : "", "w-96 max-w-96 flex gap-2 justify-between items-center ")}>
+			<div className="button min-w-3 flex items-center">
 				<input
 					disabled={editMode || deleted}
-					className="w-4 h-4"
+					className="w-4 h-4 "
 					type="checkbox"
 					name="todo-text"
 					id={ID.toString()}
@@ -27,17 +27,18 @@ const Todo = ({ content, editTodo, ID }: TodoProps) => {
 					onChange={() => setChecked(!checked)}
 				/>
 			</div>
-			<div className="w-full">
+			<div className="w-full ">
 				<p className={twMerge(checked ? "line-through opacity-55" : "", "font-medium")}>
 					{editMode ? (
-						<div>
+						<div className="flex justify-between items-center gap-2 ">
 							<input
 								type="text"
 								value={newContent}
-								className="text-[#000333]"
+								className="text-[#000333] w-full  px-2 py-1 rounded-sm"
 								onChange={(e) => setNewContent(e.target.value)}
 							/>
 							<button
+								className="bg-green-500 hover:bg-green-700 transition-all text-white px-2 py-1 rounded-sm"
 								onClick={() => {
 									setEditMode(false);
 									if (editTodo && newContent !== "") {
@@ -49,7 +50,9 @@ const Todo = ({ content, editTodo, ID }: TodoProps) => {
 							</button>
 						</div>
 					) : (
-						<label htmlFor={ID.toString()}>{content}</label>
+						<label htmlFor={ID.toString()} className="">
+							{content}
+						</label>
 					)}
 				</p>
 			</div>
@@ -73,8 +76,8 @@ const Todo = ({ content, editTodo, ID }: TodoProps) => {
 							setDeleted(!deleted);
 						}}
 						className={twMerge(
-							checked ? "opacity-20" : "",
-							"bg-red-500 hover:bg-red-700 transition-all text-white p-2 rounded-sm",
+							checked ? "opacity-20" : deleted ? "bg-yellow-500 hover:bg-yellow-700" : "bg-red-500 hover:bg-red-700",
+							" transition-all text-white p-2 rounded-sm",
 						)}
 					>
 						{deleted ? "revert" : "delete"}
