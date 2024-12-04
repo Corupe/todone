@@ -1,14 +1,23 @@
 import { useState } from "react";
-import Todo, { TodoProps } from "./Todo";
-const todosData: TodoProps[] = [
+import Todo from "./Todo";
+type todo = {
+	ID: string | number;
+	content: string;
+	finished?: boolean;
+	deleted?: boolean;
+};
+const todosData: todo[] = [
 	{ ID: "1", content: "todo1" },
 	{ ID: "2", content: "todo2" },
 	{ ID: "3", content: "todo3" },
 ];
 const TodoList = () => {
+	// const [deleted, setDeleted] = useState(false);
+	const deleteTODO = (id: string | number) => {
+		setTodos([...todos.filter((todo) => todo.ID !== id)]);
+	};
 	const [todos, setTodos] = useState(todosData);
-	const [newTodo, setNewTodo] = useState<TodoProps>({ ID: "none", content: "" });
-	console.log(todos);
+	const [newTodo, setNewTodo] = useState<todo>({ ID: "none", content: "" });
 	const handleNewTodo = () => {
 		if (newTodo.content !== "") {
 			setTodos([...todos, newTodo]);
@@ -39,7 +48,7 @@ const TodoList = () => {
 			</div>
 			<div className=" grid gap-2 p-4 place-items-center">
 				{todos.map((todo, index) => (
-					<Todo editTodo={editTodo} key={index} content={todo.content} ID={todo.ID} />
+					<Todo setDeleted={deleteTODO} editTodo={editTodo} key={index} content={todo.content} ID={todo.ID} />
 				))}
 			</div>
 		</section>

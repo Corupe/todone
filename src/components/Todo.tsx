@@ -1,24 +1,30 @@
 import { useState } from "react";
 import { twMerge } from "tailwind-merge";
-
+import { motion } from "framer-motion";
 export type TodoProps = {
 	ID: string | number;
 	content: string;
 	finished?: boolean;
-	deleted?: boolean;
+
+	setDeleted: (id: string | number) => void;
 	editTodo?: (id: string | number, newContent: string) => void;
 };
 
-const Todo = ({ content, editTodo, ID }: TodoProps) => {
+const Todo = ({ content, editTodo, ID, setDeleted }: TodoProps) => {
 	const [checked, setChecked] = useState(false);
-	const [deleted, setDeleted] = useState(false);
-	const [newContent, setNewContent] = useState("");
+	const [newContent, setNewContent] = useState(content);
 	const [editMode, setEditMode] = useState(false);
 	return (
-		<div className={twMerge(deleted ? "opacity-15" : "", "w-96 max-w-96 flex gap-2 justify-between items-center ")}>
+		<motion.div
+			initial={{ opacity: 0, x: -1000 }}
+			animate={{ opacity: 100, x: 0 }}
+			className={twMerge("w-96 max-w-96 flex gap-2 justify-between items-center ")}
+		>
 			<div className="button min-w-3 flex items-center">
-				<input
-					disabled={editMode || deleted}
+				<motion.input
+					initial={{ opacity: 0, x: -1000 }}
+					animate={{ opacity: 100, x: 0 }}
+					disabled={editMode}
 					className="w-4 h-4 "
 					type="checkbox"
 					name="todo-text"
@@ -27,7 +33,7 @@ const Todo = ({ content, editTodo, ID }: TodoProps) => {
 					onChange={() => setChecked(!checked)}
 				/>
 			</div>
-			<div className="w-full ">
+			<motion.div className="w-full " initial={{ opacity: 0, x: -1000 }} animate={{ opacity: 100, x: 0 }}>
 				<p className={twMerge(checked ? "line-through opacity-55" : "", "font-medium")}>
 					{editMode ? (
 						<div className="flex justify-between items-center gap-2 ">
@@ -55,14 +61,14 @@ const Todo = ({ content, editTodo, ID }: TodoProps) => {
 						</label>
 					)}
 				</p>
-			</div>
+			</motion.div>
 			{!editMode && (
 				<div className="flex gap-2 justify-between">
 					<button
 						onClick={() => {
 							setEditMode(!editMode);
 						}}
-						disabled={deleted || checked}
+						disabled={checked}
 						className={twMerge(
 							checked ? "opacity-20" : "",
 							"bg-blue-500 hover:bg-blue-700 transition-all text-white p-2 rounded-sm",
@@ -73,18 +79,18 @@ const Todo = ({ content, editTodo, ID }: TodoProps) => {
 					<button
 						disabled={checked}
 						onClick={() => {
-							setDeleted(!deleted);
+							setDeleted(ID);
 						}}
 						className={twMerge(
-							checked ? "opacity-20" : deleted ? "bg-yellow-500 hover:bg-yellow-700" : "bg-red-500 hover:bg-red-700",
+							checked ? "opacity-20" : "bg-red-500 hover:bg-red-700",
 							" transition-all text-white p-2 rounded-sm",
 						)}
 					>
-						{deleted ? "revert" : "delete"}
+						delete
 					</button>
 				</div>
 			)}
-		</div>
+		</motion.div>
 	);
 };
 
